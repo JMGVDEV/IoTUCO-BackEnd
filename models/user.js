@@ -1,9 +1,11 @@
-const Sequelize = require('sequelize')
+const Sequelize = require("sequelize");
 
-const User = sequelize.define('usuarios', {
-    nombre: Sequelize.STRING,
-    cedula: Sequelize.INTEGER,
-    rol: Sequelize.STRING,
-    contrasena: Sequelize.STRING,
-    token: Sequelize.STRING
-  })
+const User = sequelize.define("usuarios", {
+  name: Sequelize.STRING,
+  last_name: Sequelize.STRING,
+  id: Sequelize.INTEGER,
+  role: { type: Sequelize.STRING, defaultValue: "viewer" }, // Role types : "Viewer" || "Admin"
+  password: Sequelize.STRING
+});
+
+module.exports = { User };

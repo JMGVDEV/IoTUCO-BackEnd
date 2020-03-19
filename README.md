@@ -1,4 +1,4 @@
-# IoTUCO-BackEnd
+# IoT UCO - BackEnd
 
 To install packeges run:
 
