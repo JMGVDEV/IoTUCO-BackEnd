@@ -3,20 +3,20 @@ var auth = require("../middlewares/jwt_auth");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-function create_user(body, role = "viewer") {
+function create_user(body, admin=false) {
   return new Promise((resolve, reject) => {
+    
     user = {
       name: body.name,
       last_name: body.last_name,
       email: body.email,
-      id: body.cc,
-      role: role
+      admin: admin
     };
 
     const hash = bcrypt.hashSync(body.password, config.salt_rounds_bcrypt);
     user["password"] = hash;
 
-    User.create_user(user)
+    User.create(user)
       .then(user => {
         jwt = auth.generate_token(user);
         resolve({

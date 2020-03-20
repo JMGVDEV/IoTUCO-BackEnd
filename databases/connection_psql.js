@@ -1,13 +1,14 @@
-const Sequelize = require("sequelize");
+const Sequelize = require("sequelize").Sequelize;
 
 const sequelize = new Sequelize(
-  "postgres",
+  process.env.DATABASE,
   process.env.PSQL_USER,
   process.env.PSQL_PASSWORD,
   {
     host: "localhost",
     port: "5432",
-    dialect: "postgres"
+    dialect: "postgres",
+    logging: false
   }
 );
 
@@ -17,5 +18,9 @@ sequelize
     console.log("Connected");
   })
   .catch(err => {
-    console.log("Fail to connect" + err);
+    console.log("Fail to connect: " + err);
   });
+
+sequelize.sync();
+
+module.exports = sequelize;
