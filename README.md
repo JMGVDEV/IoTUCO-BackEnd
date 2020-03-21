@@ -6,4 +6,4 @@ To install packeges run:
 
 To run server run
 
-```node index.js```
+```npm start```
