@@ -1,8 +1,9 @@
 var router = require("express").Router();
-var users = require("../controllers/users");
+const users = require("../controllers/users");
 const HttpStatus = require("web-status-codes");
+const auth = require("../middlewares/jwt_auth");
 
-router.post("/users", (req, res) => {
+router.post("/users", mid1, mid2, (req, res) => {
   users
     .create_user(req.body)
     .then(jwt => {

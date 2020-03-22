@@ -21,6 +21,11 @@ sequelize
     console.log("Fail to connect: " + err);
   });
 
-sequelize.sync();
+// Uncomment to update all tables with the last model
+//
+//                    WARNING:
+// UNCOMMENT THIS LINE WILL DROP ALL DATA IN THE TABLES
+
+//sequelize.sync({ force: true });
 
 module.exports = sequelize;

@@ -15,4 +15,3 @@ const User = sequelize.define("usuarios", {
 });
 
 module.exports = User;
- 
