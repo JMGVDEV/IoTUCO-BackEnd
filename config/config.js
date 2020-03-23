@@ -6,6 +6,7 @@ process.env.JWT_KEY = process.env.JWT_KEY || "JWT_KEY";
 process.env.PSQL_USER = process.env.PSQL_USER || "user_iot";
 process.env.PSQL_PASSWORD = process.env.PSQL_PASSWORD || "96043017605";
 process.env.DATABASE = process.env.DATABASE || "IOT_UCO";
+process.env.MONGO_DATABASE = process.env.MONGO_DATABASE || "IOT_UCO";
 
 module.exports = {
   salt_rounds_bcrypt: 10,

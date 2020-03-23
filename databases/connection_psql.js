@@ -15,10 +15,10 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    console.log("Connected");
+    console.log("Postgres connected");
   })
   .catch(err => {
-    console.log("Fail to connect: " + err);
+    console.log("Postgres, fail to connect: " + err);
   });
 
 // Uncomment to update all tables with the last model
