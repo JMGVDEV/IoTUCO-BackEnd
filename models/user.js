@@ -10,9 +10,10 @@ const User = sequelize.define("usuarios", {
     allowNull: false,
     validate: { isEmail: true }
   },
-  admin: { type: types.BOOLEAN, defaultValue: false },
+  role: { type: types.ENUM("admin", "viewer"), defaultValue: "viewer" },
   password: { type: types.STRING, allowNull: false }
 });
 
+User.sync();
+
 module.exports = User;
- 

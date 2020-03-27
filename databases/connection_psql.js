@@ -1,9 +1,10 @@
+const config = require("../config/config");
 const Sequelize = require("sequelize").Sequelize;
 
 const sequelize = new Sequelize(
-  process.env.DATABASE,
-  process.env.PSQL_USER,
-  process.env.PSQL_PASSWORD,
+  config.PSQL_DATABASE,
+  config.PSQL_USER,
+  config.PSQL_PASSWORD,
   {
     host: "localhost",
     port: "5432",
@@ -15,12 +16,17 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    console.log("Connected");
+    console.log("Postgres connected");
   })
   .catch(err => {
-    console.log("Fail to connect: " + err);
+    console.log("Postgres, fail to connect: " + err);
   });
 
-sequelize.sync();
+// Uncomment to update all tables with the last model
+//
+//                    WARNING:
+// UNCOMMENT THIS LINE WILL DROP ALL DATA IN THE TABLES
+
+//sequelize.sync({ force: true });
 
 module.exports = sequelize;
