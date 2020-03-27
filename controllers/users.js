@@ -3,14 +3,10 @@ var auth = require("../middlewares/jwt_auth");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-// To create or update admin user
-//           WARNING
-//password must be changed in production
 User.upsert({
-  name: "admin",
-  last_name: "admin",
-  email: "admin@iot.com",
-  password: bcrypt.hashSync("admin", config.salt_rounds_bcrypt),
+  name: config.ADMIN_NAME,
+  email: config.ADMIN_EMAIL,
+  password: bcrypt.hashSync(config.ADMIN_PASSWORD, config.SALT_ROUNDS),
   role: "admin"
 });
 

@@ -1,4 +1,4 @@
-require("./config/config");
+const config = require("./config/config");
 let bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
@@ -27,8 +27,8 @@ app.get("/test", (req, res) => {
 
 app.use(require("./routes/index"));
 
-app.set("port", process.env.PORT);
-app.set("ip", process.env.IP);
+app.set("port", config.PORT);
+app.set("ip", config.IP);
 
 app.listen(app.get("port"), app.get("ip"), () => {
   console.log("\nServer listen in port: ", app.get("port"));

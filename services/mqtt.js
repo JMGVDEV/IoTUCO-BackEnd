@@ -1,23 +1,16 @@
+const config = require("../config/config");
 var mqtt = require("mqtt");
 var environment = require("../controllers/environment");
 
-var MQTT_CONF = {
-  port: process.env.MQTT_BROKER_PORT,
-  username: process.env.MQTT_BROKER_USER,
-  password: process.env.MQTT_BROKER_PASSWORD
-};
-
-var growbed_client = mqtt.connect(process.env.MQTT_BROKER_URL, MQTT_CONF);
-var greenroom_client = mqtt.connect(process.env.MQTT_BROKER_URL, MQTT_CONF);
-var access_client = mqtt.connect(process.env.MQTT_BROKER_URL, MQTT_CONF);
+var growbed_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
+var greenroom_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
+var access_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
 
 growbed_client.on("connect", function growbed_message() {
   growbed_client.subscribe(
     "medicion/zona/+/invernadero/+/cama/+/ambiente",
     function(err) {
-      console.log(
-        "Subscrito al tópico correctamente medicion/zona/x/invernadero/y/cama/z/ambiente."
-      );
+      console.log("Grow bed mqtt client connected");
     }
   );
 });
@@ -32,13 +25,11 @@ greenroom_client.on("connect", function() {
   greenroom_client.subscribe("medicion/zona/+/invernadero/+/ambiente", function(
     err
   ) {
-    console.log(
-      "Subscrito al tópico correctamente medicion/zona/x/invernadero/y/ambiente."
-    );
+    console.log("Green room mqtt client connected");
   });
 });
 greenroom_client.on("message", function(topic, message) {
-  console.log(message.toString());
+  //console.log(message.toString());
   greenroom_client.end;
 });
 
@@ -46,12 +37,11 @@ access_client.on("connect", function() {
   access_client.subscribe("medicion/zona/+/invernadero/+/ingresos", function(
     err
   ) {
-    console.log(
-      "Subscrito al tópico correctamente medicion/zona/x/invernadero/y/ingresos."
-    );
+    console.log("Access mqtt client connected");
   });
 });
+
 access_client.on("message", function(topic, message) {
-  console.log(message.toString());
+  //console.log(message.toString());
   access_client.end;
 });

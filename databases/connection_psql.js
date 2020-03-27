@@ -1,9 +1,10 @@
+const config = require("../config/config");
 const Sequelize = require("sequelize").Sequelize;
 
 const sequelize = new Sequelize(
-  process.env.DATABASE,
-  process.env.PSQL_USER,
-  process.env.PSQL_PASSWORD,
+  config.PSQL_DATABASE,
+  config.PSQL_USER,
+  config.PSQL_PASSWORD,
   {
     host: "localhost",
     port: "5432",

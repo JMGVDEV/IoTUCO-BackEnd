@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 function verify_admin(req, res, next) {
   let token = req.headers.token;
 
-  jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(token, config.JWT_KEY, (err, decoded) => {
     console.log(decoded);
     if (err || decoded.role != "admin") {
       return res.status(HttpStatus.UNAUTHORIZED).json({
@@ -24,8 +24,8 @@ function generate_token(user) {
     role: user.role
   };
 
-  return jwt.sign(token_payload, process.env.JWT_KEY, {
-    expiresIn: config.token_exp_time
+  return jwt.sign(token_payload, config.JWT_KEY, {
+    expiresIn: config.TOKEN_EXP_TIME
   });
 }
 
