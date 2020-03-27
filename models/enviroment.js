@@ -8,7 +8,7 @@ var grow_bed_schema = new Schema({
   greenhouse: Schema.Types.Number,
   hour: Schema.Types.Date,
   device_id: Schema.Types.String,
-  gow_bed: Schema.Types.Number
+  grow_bed: Schema.Types.Number
 });
 
 var greenhouse_schema = new Schema({
@@ -17,7 +17,7 @@ var greenhouse_schema = new Schema({
   zone: Schema.Types.Number,
   greenhouse: Schema.Types.Number,
   hour: Schema.Types.Date,
-  device_id: Schema.Types.String,
+  device_id: Schema.Types.String
 });
 
 var access_schema = new Schema({
@@ -25,10 +25,9 @@ var access_schema = new Schema({
   zone: Schema.Types.Number,
   greenhouse: Schema.Types.Number,
   hour: Schema.Types.Date,
-  device_id: Schema.Types.String,
+  device_id: Schema.Types.String
 });
 
 var grow_bed_environment = mongoose.model("environment", grow_bed_schema);
 
-module.exports = {grow_bed_environment};
-
+module.exports = { grow_bed_environment };

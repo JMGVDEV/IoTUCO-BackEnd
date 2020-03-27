@@ -4,6 +4,7 @@ let express = require("express");
 let app = express();
 require("./databases/connection_mongodb");
 require("./databases/connection_psql");
+require("./services/mqtt");
 
 // For avoid cors errors
 app.use((req, res, next) => {
