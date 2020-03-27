@@ -5,7 +5,7 @@
 //               rename this file to config.js
 //-------------------------------------------------------------
 
-config = {
+const config = {
   // Server config
   PORT: xxxx,
   IP: "xxx.xxx.xxx.xxx",
@@ -13,14 +13,16 @@ config = {
   // Databases config
   PSQL_USER: "xxxx",
   PSQL_PASSWORD: "xxxx",
-  DATABASE: "xxxx",
+  PSQL_DATABASE: "xxxx",
   MONGO_DATABASE: "xxxx",
 
   // Mqtt config
-  MQTT_BROKER_URL: "xxxx",
-  MQTT_BROKER_USER: "xxxx",
-  MQTT_BROKER_PASSWORD: "xxxx",
-  MQTT_BROKER_PORT: xxxx,
+  MQTT_CONF: {
+    host: "xxxxxxxx",
+    port: xxxxx,
+    username: "xxxx",
+    password: "xxxx"
+  },
 
   // Initial user config
   ADMIN_NAME: "xxxx",
@@ -29,8 +31,8 @@ config = {
 
   // Security Config
   JWT_KEY: "xxxx",
-  SALT_ROUNDS: 10,
-  TOKEN_EXO_TIME: "x days"
+  SALT_ROUNDS: xx,
+  TOKEN_EXP_TIME: "xx days"
 };
 
 module.exports = config;
