@@ -21,8 +21,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/test", (req, res) => {
-  res.status(200).json({ ok: true });
+app.get("/", (req, res) => {
+  res.status(200).send("<h2>Server On</h2>");
 });
 
 app.use(require("./routes/index"));
