@@ -1,4 +1,5 @@
 const config = require("./config/config");
+const users = require("./controllers/users");
 let bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
@@ -33,3 +34,7 @@ app.set("ip", config.IP);
 app.listen(app.get("port"), app.get("ip"), () => {
   console.log("\nServer listen in port: ", app.get("port"));
 });
+
+// For update user schema for Aws
+
+users.create_admin();

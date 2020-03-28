@@ -5,11 +5,11 @@
 1. Tnstall packeges:
 
     ``npm install``
+2. Install Mongo DB, and Postgres and create de databases
 
-2. Edit file config/_config.js
+3. Edit config file in
+   > config/_config.js
 
-3. Run server:
+4. Run server:
 
     ```npm start```
-
-    Note: If you have problems with sequelize when it create the tables, uncomment ``sequelize.sync({force:true})`` in databases/conection_psql.js, run the script, and then comment again.

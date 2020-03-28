@@ -3,14 +3,26 @@ var auth = require("../middlewares/jwt_auth");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-User.upsert({
-  name: config.ADMIN_NAME,
-  email: config.ADMIN_EMAIL,
-  password: bcrypt.hashSync(config.ADMIN_PASSWORD, config.SALT_ROUNDS),
-  role: "admin"
-});
+create_admin = async () => {
+  console.log("Trying to create admin user");
+  await User.sync();
+
+  User.upsert({
+    name: config.ADMIN_NAME,
+    email: config.ADMIN_EMAIL,
+    password: bcrypt.hashSync(config.ADMIN_PASSWORD, config.SALT_ROUNDS),
+    role: "admin"
+  })
+    .then(admin => {
+      console.log("Admin updated: " + admin);
+    })
+    .catch(err => {
+      console.log("failed to create admin: " + err);
+    });
+};
 
 create_user = user_data => {
+  console.log("Trying to create user");
   return new Promise((resolve, reject) => {
     user = {
       name: user_data.name,
@@ -19,13 +31,10 @@ create_user = user_data => {
       role: user_data.role
     };
 
-    user["password"] = bcrypt.hashSync(
-      user_data.password,
-      config.salt_rounds_bcrypt
-    );
+    user["password"] = bcrypt.hashSync(user_data.password, config.SALT_ROUNDS);
 
     User.create(user)
-      .then(() => {
+      .then(user => {
         resolve();
       })
       .catch(err => {
@@ -56,6 +65,7 @@ delete_user = user_data => {
 };
 
 update_user = (user_data_updated, id) => {
+  console.log("trying to update user");
   return new Promise((resolve, reject) => {
     User.findByPk(id)
       .then(user => {
@@ -106,5 +116,6 @@ module.exports = {
   get_all_users,
   update_user,
   delete_user,
-  login_user
+  login_user,
+  create_admin
 };
