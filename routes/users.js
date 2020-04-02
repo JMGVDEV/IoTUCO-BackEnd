@@ -11,6 +11,7 @@ router.post("/users", auth.verify_admin, (req, res) => {
       res.status(HttpStatus.CREATED).json({ ok: true });
     })
     .catch(err => {
+      console.log("err:" + err);
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
 });
@@ -34,6 +35,7 @@ router.put("/users/:id", auth.verify_admin, (req, res) => {
       res.status(HttpStatus.OK).json({ ok: true });
     })
     .catch(err => {
+      console.log("err" + err);
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
 });

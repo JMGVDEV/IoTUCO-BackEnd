@@ -6,11 +6,16 @@ var growbed_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
 var greenroom_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
 var access_client = mqtt.connect(config.MQTT_CONF.host, config.MQTT_CONF);
 
-growbed_client.on("connect", function growbed_message() {
+// -------------------------------------------------------------------------
+growbed_client.on("connect", () => {
   growbed_client.subscribe(
     "medicion/zona/+/invernadero/+/cama/+/ambiente",
-    function(err) {
-      console.log("Grow bed mqtt client connected");
+    (err, success) => {
+      if (success) {
+        console.log("Grow bed mqtt client connected");
+      } else {
+        console.log("Grow bed mqtt client not connected");
+      }
     }
   );
 });
@@ -21,23 +26,31 @@ growbed_client.on("message", function(topic, message) {
   growbed_client.end;
 });
 
-greenroom_client.on("connect", function() {
-  greenroom_client.subscribe("medicion/zona/+/invernadero/+/ambiente", function(
-    err
-  ) {
-    console.log("Green room mqtt client connected");
-  });
+// -------------------------------------------------------------------------
+greenroom_client.on("connect", () => {
+  greenroom_client.subscribe(
+    "medicion/zona/+/invernadero/+/ambiente",
+    (err, success) => {
+      if (success) {
+        console.log("Green room mqtt client connected");
+      } else {
+        console.log("Green room mqtt client not connected");
+      }
+    }
+  );
 });
 greenroom_client.on("message", function(topic, message) {
   //console.log(message.toString());
   greenroom_client.end;
 });
-
-access_client.on("connect", function() {
-  access_client.subscribe("medicion/zona/+/invernadero/+/ingresos", function(
-    err
-  ) {
-    console.log("Access mqtt client connected");
+// -------------------------------------------------------------------------
+access_client.on("connect", () => {
+  access_client.subscribe("medicion", (err, success) => {
+    if (success) {
+      console.log("Acces mqtt client connected");
+    } else {
+      console.log("Acces mqtt client not connected");
+    }
   });
 });
 

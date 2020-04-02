@@ -14,6 +14,6 @@ const User = sequelize.define("usuarios", {
   password: { type: types.STRING, allowNull: false }
 });
 
-User.sync();
+//User.sync();
 
 module.exports = User;

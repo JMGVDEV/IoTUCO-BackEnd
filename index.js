@@ -1,4 +1,5 @@
 const config = require("./config/config");
+const users = require("./controllers/users");
 let bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
@@ -21,8 +22,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/test", (req, res) => {
-  res.status(200).json({ ok: true });
+app.get("/", (req, res) => {
+  res.status(200).send("<h2>Server On</h2>");
 });
 
 app.use(require("./routes/index"));
@@ -33,3 +34,7 @@ app.set("ip", config.IP);
 app.listen(app.get("port"), app.get("ip"), () => {
   console.log("\nServer listen in port: ", app.get("port"));
 });
+
+// For update user schema for Aws
+
+users.create_admin();
