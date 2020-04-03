@@ -1,5 +1,5 @@
 const config = require("./config/config");
-const users = require("./controllers/users");
+const models = require("./controllers/index");
 let bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
@@ -36,5 +36,4 @@ app.listen(app.get("port"), app.get("ip"), () => {
 });
 
 // For update user schema for Aws
-
-users.create_admin();
+models.sync_models();

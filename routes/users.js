@@ -54,10 +54,11 @@ router.delete("/users/:id", auth.verify_admin, (req, res) => {
 
 // User: Login
 router.post("/login", (req, res) => {
+  console.log(req.body);
   users
     .login_user(req.body)
-    .then(jwt => {
-      res.status(HttpStatus.OK).json({ ok: true, ...jwt });
+    .then(response => {
+      res.status(HttpStatus.OK).json({ ok: true, ...response });
     })
     .catch(err => {
       res.status(HttpStatus.UNAUTHORIZED).json({ ok: false, err: err });
