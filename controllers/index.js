@@ -9,5 +9,5 @@ sync_models = () => {
 module.exports = {
   sync_models,
   Users,
-  Devices
+  Devices,
 };

@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: "localhost",
     port: "5432",
     dialect: "postgres",
-    logging: false
+    logging: false,
   }
 );
 
@@ -18,7 +18,7 @@ sequelize
   .then(() => {
     console.log("Postgres connected");
   })
-  .catch(err => {
+  .catch((err) => {
     console.log("Postgres, fail to connect: " + err);
   });
 
