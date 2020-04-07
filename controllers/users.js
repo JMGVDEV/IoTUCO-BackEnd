@@ -3,7 +3,7 @@ var auth = require("../middlewares/jwt_auth");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-create_admin = async () => {
+sync_users = async () => {
   console.log("Trying to create admin user");
   await User.sync();
 
@@ -99,6 +99,8 @@ login_user = user_data => {
             if (password_is_valid) {
               const jwt = auth.generate_token(user);
               resolve({
+                name: user.name,
+                last_name: user.last_name,
                 jwt
               });
             }
@@ -117,5 +119,5 @@ module.exports = {
   update_user,
   delete_user,
   login_user,
-  create_admin
+  sync_users
 };
