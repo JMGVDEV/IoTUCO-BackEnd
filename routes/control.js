@@ -7,11 +7,11 @@ const peripherals = require("../Utils/peripherals");
 router.post("/control/blinds", auth.verify_user, (req, res) => {
   console.log(req.body);
 
-  control.publish_greenroom(
-    peripherals.BLIND,
+  control.publish_greenhouse(
+    peripherals.BLINDS,
     req.body.value,
     req.body.zone,
-    req.body.greenroom
+    req.body.greenhouse
   );
   res.status(HttpStatus.OK).json({ ok: true });
 });
