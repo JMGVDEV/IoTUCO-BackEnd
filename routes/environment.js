@@ -17,10 +17,10 @@ const HttpStatus = require("web-status-codes");
 router.get("/grow_beds", auth.verify_user, (req, res) => {
   devices
     .get_all_grow_beds()
-    .then(grow_beds_list => {
+    .then((grow_beds_list) => {
       res.status(HttpStatus.OK).json({ ok: true, grow_beds: grow_beds_list });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(HttpStatus.SERVER_ERROR).json({ ok: false, err: err });
     });
 });
@@ -28,14 +28,26 @@ router.get("/grow_beds", auth.verify_user, (req, res) => {
 router.get("/grow_houses", auth.verify_user, (req, res) => {
   devices
     .get_all_grow_houses()
-    .then(green_house_list => {
+    .then((green_house_list) => {
       res
         .status(HttpStatus.OK)
         .json({ ok: true, green_houses: green_house_list });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(HttpStatus.SERVER_ERROR).json({ ok: false, err: err });
     });
+});
+
+// ------------------------------------------------------------------
+//          MODIFY TO GET ENVIRONMENT VARIABLES OF DATABASE
+//-------------------------------------------------------------------
+
+router.get("/grow_beds/:id", auth.verify_user, (req, res) => {
+  res.status(HttpStatus.OK).json({
+    ok: true,
+    grow_bed: 1,
+    environment: { temperature: 25, humidity: 50 },
+  });
 });
 
 module.exports = router;
