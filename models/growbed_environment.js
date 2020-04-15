@@ -8,11 +8,11 @@ var growbed_environment_schema = new Schema({
   greenhouse: Schema.Types.Number,
   hour: Schema.Types.Date,
   device_id: Schema.Types.String,
-  grow_bed: Schema.Types.Number,
+  growbed: Schema.Types.Number,
 });
 
 var growbed_environment = mongoose.model(
-  "growbed_environment",
+  "environment_growbed",
   growbed_environment_schema
 );
 
