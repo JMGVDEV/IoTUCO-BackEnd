@@ -24,7 +24,7 @@ growbed_client.on("connect", () => {
 });
 
 growbed_client.on("message", function (topic, message) {
-  console.log(message.toString());
-  environment.save_grow_bed_environment_registre(message.toString());
+  let growbed_data = message.toString();
+  environment.save_growbed_environment_registre(growbed_data);
   growbed_client.end;
 });

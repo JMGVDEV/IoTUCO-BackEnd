@@ -19,6 +19,7 @@ function publish_greenhouse(peripheral, value, zone, greenhouse) {
   let topic = `control/zona/${zone}/invernadero/${greenhouse}`;
   let payload = `{peripheral:${peripheral},value:${value}}`;
   control_client.publish(topic, payload);
+  console.log(topic, payload);
 }
 
 module.exports = { publish_growbed, publish_greenhouse };

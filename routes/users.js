@@ -10,7 +10,7 @@ router.post("/users", auth.verify_admin, (req, res) => {
     .then(() => {
       res.status(HttpStatus.CREATED).json({ ok: true });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("err:" + err);
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
@@ -20,10 +20,10 @@ router.post("/users", auth.verify_admin, (req, res) => {
 router.get("/users", auth.verify_admin, (req, res) => {
   users
     .get_all_users()
-    .then(users => {
+    .then((users) => {
       res.status(HttpStatus.CREATED).json({ ok: true, users });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
 });
@@ -34,7 +34,7 @@ router.put("/users/:id", auth.verify_admin, (req, res) => {
     .then(() => {
       res.status(HttpStatus.OK).json({ ok: true });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("err" + err);
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
@@ -47,7 +47,7 @@ router.delete("/users/:id", auth.verify_admin, (req, res) => {
     .then(() => {
       res.status(HttpStatus.OK).json({ ok: true });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
 });
@@ -57,12 +57,16 @@ router.post("/login", (req, res) => {
   console.log(req.body);
   users
     .login_user(req.body)
-    .then(response => {
+    .then((response) => {
       res.status(HttpStatus.OK).json({ ok: true, ...response });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(HttpStatus.UNAUTHORIZED).json({ ok: false, err: err });
     });
+});
+
+router.get("/validate_token", auth.verify_user, (req, res) => {
+  res.status(HttpStatus.OK).json({ ok: true });
 });
 
 module.exports = router;

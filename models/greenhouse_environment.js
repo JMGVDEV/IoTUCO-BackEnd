@@ -11,7 +11,7 @@ const greenhouse_environment_schema = new Schema({
 });
 
 var greenhouse_environment = mongoose.model(
-  "greenhouse_environment",
+  "environment_greenhouse",
   greenhouse_environment_schema
 );
 

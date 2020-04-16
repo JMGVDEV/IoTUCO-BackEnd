@@ -18,10 +18,10 @@ const config = {
 
   // Mqtt config
   MQTT_CONF: {
-    host: "xxxxxxxx",
+    host: "mqtt://xxx.xxx.xxx.xxx",
     port: xxxxx,
     username: "xxxx",
-    password: "xxxx"
+    password: "xxxx",
   },
 
   // Initial user config
@@ -32,7 +32,7 @@ const config = {
   // Security Config
   JWT_KEY: "xxxx",
   SALT_ROUNDS: xx,
-  TOKEN_EXP_TIME: "xx days"
+  TOKEN_EXP_TIME: "xx days",
 };
 
 module.exports = config;
