@@ -2,6 +2,7 @@ const devices = require("../controllers/devices");
 var router = require("express").Router();
 const auth = require("../middlewares/jwt_auth");
 const HttpStatus = require("web-status-codes");
+const environment = require("../controllers/growbed_environment");
 
 /* ------------------------------------------------------------------------------- 
         No se espera que éste código funcione adecuadamente cuando la
@@ -42,12 +43,20 @@ router.get("/grow_houses", auth.verify_user, (req, res) => {
 //          MODIFY TO GET ENVIRONMENT VARIABLES OF DATABASE
 //-------------------------------------------------------------------
 
-router.get("/grow_beds/:id", auth.verify_user, (req, res) => {
-  res.status(HttpStatus.OK).json({
-    ok: true,
-    grow_bed: 1,
-    environment: { temperature: 25, humidity: 50 },
-  });
+router.get("/grow_beds/:growbed_id", auth.verify_user, (req, res) => {
+  environment
+    .get_environment(req.params.growbed_id)
+    .then((environment) => {
+      res.status(HttpStatus.OK).json({
+        ok: true,
+        ...environment,
+      });
+    })
+    .catch((e) => {
+      res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ ok: false, error: e.toString() });
+    });
 });
 
 module.exports = router;

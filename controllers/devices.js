@@ -7,14 +7,7 @@ sync_devices = async () => {
 add_device = (device_data) => {
   console.log("Trying to create device");
 
-  const device = {
-    device_id: device_data.id,
-    zone: device_data.zona,
-    green_house: device_data.invernadero,
-    grow_bed: device_data.cama,
-  };
-
-  Device.upsert(device)
+  Device.upsert(device_data)
     .then((device) => {
       console.log("Device created or updated: " + device);
     })
@@ -27,11 +20,11 @@ get_all_grow_beds = () => {
   return new Promise((resolve, reject) => {
     Device.findAll({
       raw: true,
-      attributes: ["grow_bed", "zone", "green_house"],
+      attributes: ["id", "growbed", "zone", "greenhouse"],
     })
       .then((grow_beds) => {
         const grow_bed_list = grow_beds.filter((grow) => {
-          return grow.grow_bed ? grow.grow_bed : undefined;
+          return grow.growbed ? grow.growbed : undefined;
         });
         resolve(grow_bed_list);
       })
@@ -45,14 +38,14 @@ get_all_grow_houses = () => {
   return new Promise((resolve, reject) => {
     Device.findAll({
       raw: true,
-      attributes: ["zone", "green_house"],
+      attributes: ["zone", "greenhouse"],
     })
       .then((green_houses) => {
         green_house_list = green_houses.filter((obj, pos, arr) => {
           return (
             arr
-              .map((mapObj) => mapObj["green_house"])
-              .indexOf(obj["green_house"]) === pos
+              .map((mapObj) => mapObj["greenhouse"])
+              .indexOf(obj["greenhouse"]) === pos
           );
         });
 

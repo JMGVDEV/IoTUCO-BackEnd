@@ -16,7 +16,6 @@ save_growbed_environment_registre = (growbed_data) => {
   growbed_data = JSON.parse(growbed_data);
   growbed_data.hour = growbed_data.hour * 1000; // For adjust time to local hour
   const new_growbed_environment = new growbed_environment(growbed_data);
-
   new_growbed_environment
     .save()
     .then(() => {
@@ -27,4 +26,24 @@ save_growbed_environment_registre = (growbed_data) => {
     });
 };
 
-module.exports = { save_growbed_environment_registre };
+get_environment = (growbed_id) => {
+  return new Promise((resolve, reject) => {
+    let response = { growbed: growbed_id };
+
+    growbed_environment
+      .findOne({ growbed: growbed_id })
+      .sort({ hour: -1 })
+      .then((res) => {
+        response["environment"] = {
+          temperature: parseFloat(res.temperature),
+          humidity: parseFloat(res.humidity),
+        };
+        resolve(response);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+module.exports = { save_growbed_environment_registre, get_environment };

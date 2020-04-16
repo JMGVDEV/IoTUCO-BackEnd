@@ -2,15 +2,9 @@ const sequelize = require("../databases/connection_psql");
 const types = require("sequelize").DataTypes;
 
 const Device = sequelize.define("dispositivos", {
-  device_id: {
-    type: types.STRING,
-    primaryKey: true,
-    allowNull: false,
-    unique: true,
-  },
-  zone: { type: types.INTEGER, allowNull: false },
+  growbed: { type: types.INTEGER, allowNull: false, unique: true },
   greenhouse: { type: types.INTEGER, allowNull: false },
-  growbed: { type: types.INTEGER, allowNull: true },
+  zone: { type: types.INTEGER, allowNull: false },
 });
 
 module.exports = Device;
