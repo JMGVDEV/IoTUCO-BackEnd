@@ -60,8 +60,20 @@ function program_lights(data) {
       data.growbed
     );
   });
-
   lights_jobs.growbed = [init_job, end_job];
+
+  let minutes_diff = diff_minutes(
+    new Date(),
+    lights_jobs.growbed[0].nextInvocation()
+  );
+
+  console.log(`Lights will turn on in: ${minutes_diff} minutes`);
+}
+
+function diff_minutes(dt2, dt1) {
+  var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= 60;
+  return Math.abs(Math.round(diff));
 }
 
 function publish_greenhouse(peripheral, value, zone, greenhouse) {
