@@ -21,7 +21,7 @@ router.get("/users", auth.verify_admin, (req, res) => {
   users
     .get_all_users()
     .then((users) => {
-      res.status(HttpStatus.CREATED).json({ ok: true, users });
+      res.status(HttpStatus.OK).json({ ok: true, users });
     })
     .catch((err) => {
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
