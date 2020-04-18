@@ -27,15 +27,17 @@ router.post("/control/fan", auth.verify_user, (req, res) => {
 });
 
 router.post("/control/lights", auth.verify_user, (req, res) => {
-  /*control.publish_growbed(
-    peripherals.LIGHT,
-    req.body.value,
-    req.body.zone,
-    req.body.greenhouse,
-    req.body.growbed
-  );*/
-  control.program_lights(req.body);
-  res.status(HttpStatus.OK).json({ ok: true });
+  control
+    .program_lights(req.body)
+    .then(() => {
+      res.status(HttpStatus.OK).json({ ok: true });
+    })
+    .catch((err) => {
+      res.status(HttpStatus.BAD_REQUEST).json({ ok: false, err });
+    });
+  /*.catch(() => {
+      res.status(HttpStatus.CLIENT_ERROR).json({ ok: false });
+    });*/
 });
 
 module.exports = router;

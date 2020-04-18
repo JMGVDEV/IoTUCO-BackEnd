@@ -1,6 +1,6 @@
 const config = require("../../config/config");
 var mqtt = require("mqtt");
-var schedule = require("node-schedule-tz");
+var schedule = require("node-schedule");
 var peripherals = require("../../Utils/peripherals");
 
 /*---------------------------------------------------------------------
@@ -20,67 +20,91 @@ function publish_growbed(peripheral, value, zone, greenhouse, growbed) {
   control_client.publish(topic, payload);
 }
 
-function program_lights(data) {
-  lights_jobs.forEach((job) => job.cancel());
-
-  let [hour_init, minute_init, second_init] = data.time_init.split(":");
-  let [hour_end, minute_end, second_end] = data.time_end.split(":");
-
-  let rule_init = new schedule.RecurrenceRule();
-  let rule_end = new schedule.RecurrenceRule();
-
-  rule_init.hour = hour_init;
-  rule_init.minute = minute_init;
-  rule_init.second = second_init;
-  rule_init.tz = "America/Bogota";
-
-  rule_end.hour = hour_end;
-  rule_end.minute = minute_end;
-  rule_end.second = second_end;
-  rule_end.tz = "America/Bogota";
-
-  let init_job = schedule.scheduleJob(rule_init, () => {
-    console.log("Turn lights on: " + data.growbed);
-    publish_growbed(
-      peripherals.LIGHT,
-      data.value,
-      data.zone,
-      data.greenhouse,
-      data.growbed
-    );
-  });
-
-  let end_job = schedule.scheduleJob(rule_end, () => {
-    console.log("Turn lights off: " + data.growbed);
-    publish_growbed(
-      peripherals.LIGHT,
-      0,
-      data.zone,
-      data.greenhouse,
-      data.growbed
-    );
-  });
-  lights_jobs.growbed = [init_job, end_job];
-
-  let minutes_diff = diff_minutes(
-    new Date(),
-    lights_jobs.growbed[0].nextInvocation()
-  );
-
-  console.log(`Lights will turn on in: ${minutes_diff} minutes`);
-}
-
-function diff_minutes(dt2, dt1) {
-  var diff = (dt2.getTime() - dt1.getTime()) / 1000;
-  diff /= 60;
-  return Math.abs(Math.round(diff));
-}
-
 function publish_greenhouse(peripheral, value, zone, greenhouse) {
   let topic = `control/zona/${zone}/invernadero/${greenhouse}`;
   let payload = `{peripheral:${peripheral},value:${value}}`;
   control_client.publish(topic, payload);
   console.log(topic, payload);
+}
+
+function program_lights(data) {
+  return new Promise((resolve, reject) => {
+    let message_validation = message_is_ok(data);
+
+    console.log(data.value);
+    if (message_validation.status == false) {
+      reject(message_validation.errors);
+      return;
+    } else {
+      resolve();
+    }
+
+    lights_jobs.forEach((job) => job.cancel());
+
+    let [hour_init, minute_init, second_init] = data.time_init.split(":");
+    let [hour_end, minute_end, second_end] = data.time_end.split(":");
+
+    let rule_init = new schedule.RecurrenceRule();
+    let rule_end = new schedule.RecurrenceRule();
+
+    rule_init.hour = hour_init;
+    rule_init.minute = minute_init;
+    rule_init.second = second_init;
+    rule_init.tz = "America/Bogota";
+
+    rule_end.hour = hour_end;
+    rule_end.minute = minute_end;
+    rule_end.second = second_end;
+    rule_end.tz = "America/Bogota";
+
+    let init_job = schedule.scheduleJob(rule_init, () => {
+      console.log("Turn lights on: " + data.growbed);
+      publish_growbed(
+        peripherals.LIGHT,
+        data.value,
+        data.zone,
+        data.greenhouse,
+        data.growbed
+      );
+    });
+
+    let end_job = schedule.scheduleJob(rule_end, () => {
+      console.log("Turn lights off: " + data.growbed);
+      publish_growbed(
+        peripherals.LIGHT,
+        0,
+        data.zone,
+        data.greenhouse,
+        data.growbed
+      );
+    });
+    lights_jobs.growbed = [init_job, end_job];
+    console.log("Lights will be programed");
+  });
+}
+
+function message_is_ok(data) {
+  let errors = [];
+  let { zone, value, growbed, greenhouse, time_init, time_end } = data;
+
+  let time_regex = new RegExp(
+    "^([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]){1}$",
+    "i"
+  );
+
+  isNaN(zone) || zone == null || zone == "" ? errors.push({ zone }) : null;
+  isNaN(value) || value == null || value == "" ? errors.push({ value }) : null;
+  isNaN(growbed) || growbed == null || growbed == ""
+    ? errors.push({ growbed })
+    : null;
+  isNaN(greenhouse) || greenhouse == null || greenhouse == ""
+    ? errors.push({ greenhouse })
+    : null;
+
+  !time_regex.test(time_init) ? errors.push({ time_init }) : null;
+  !time_regex.test(time_end) ? errors.push({ time_end }) : null;
+
+  return errors.length ? { status: false, errors } : { status: true };
 }
 
 module.exports = { publish_growbed, publish_greenhouse, program_lights };
