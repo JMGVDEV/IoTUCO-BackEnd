@@ -14,6 +14,6 @@ access_client.on("connect", () => {
 });
 
 access_client.on("message", function (topic, message) {
-  console.log(message.toString());
+  console.log(JSON.parse(message.toString()));
   access_client.end;
 });
