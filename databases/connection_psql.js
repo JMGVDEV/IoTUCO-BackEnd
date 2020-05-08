@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
   config.PSQL_PASSWORD,
   {
     host: "localhost",
-    port: "5432",
+    port: "5433",
     dialect: "postgres",
     logging: false,
   }

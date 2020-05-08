@@ -1,5 +1,6 @@
 const config = require("./config/config");
 const models = require("./controllers/index");
+const path = require('path');
 let bodyParser = require("body-parser");
 let express = require("express");
 let app = express();
@@ -31,10 +32,6 @@ app.use(bodyParser.json());
  *         Define main entry point and routes
  *-------------------------------------------------------*/
 
-app.get("/", (req, res) => {
-  res.status(200).send("<h2>Server On</h2>");
-});
-
 app.use(require("./routes/index"));
 
 /* ------------------------------------------------------
@@ -52,3 +49,14 @@ app.listen(app.get("port"), app.get("ip"), () => {
  *             (required for  Aws deploy)
  *-------------------------------------------------------*/
 models.sync_models();
+
+/* ------------------------------------------------------
+ *              Config web page
+ *-------------------------------------------------------*/
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+
+
