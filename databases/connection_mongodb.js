@@ -1,16 +1,19 @@
-const config = require("../config/config");
-var mongoose = require("mongoose");
+const config = require('../config/config');
+var mongoose = require('mongoose');
 
 mongoose
-  .connect(`mongodb://localhost:27017/${config.MONGO_DATABASE}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(
+    `mongodb://${config.MONGO_IP}:${config.MONGO_PORT}/${config.MONGO_DATABASE}`,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
   .then(() => {
-    console.log("Mongo connected");
+    console.log('Mongo connected');
   })
-  .catch(err => {
-    console.log("Mongo, fail to connect: " + err);
+  .catch((err) => {
+    console.log('Mongo, fail to connect: ' + err);
   });
 
 module.exports = { mongoose };
