@@ -11,6 +11,8 @@ const config = {
   IP: "xxx.xxx.xxx.xxx",
 
   // Databases config
+  PSQL_IP: 'xxxx.xxxx.xxxx.xxxx',
+  PSQL_PORT: xxxx,
   PSQL_USER: "xxxx",
   PSQL_PASSWORD: "xxxx",
   PSQL_DATABASE: "xxxx",
