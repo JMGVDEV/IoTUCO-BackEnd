@@ -5,13 +5,6 @@
 //               rename this file to config.js
 //-------------------------------------------------------------
 
-//-------------------------------------------------------------
-//                   PROJECT CONFIGURATIONS
-//
-//         Set the project configurations, and then
-//               rename this file to config.js
-//-------------------------------------------------------------
-
 const config = {
   // Server config
   PORT: x,
