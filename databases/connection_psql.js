@@ -1,14 +1,14 @@
-const config = require("../config/config");
-const Sequelize = require("sequelize").Sequelize;
+const config = require('../config/config');
+const Sequelize = require('sequelize').Sequelize;
 
 const sequelize = new Sequelize(
   config.PSQL_DATABASE,
   config.PSQL_USER,
   config.PSQL_PASSWORD,
   {
-    host: "localhost",
-    port: "5433",
-    dialect: "postgres",
+    host: config.PSQL_IP,
+    port: config.PSQL_PORT,
+    dialect: 'postgres',
     logging: false,
   }
 );
@@ -16,10 +16,10 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    console.log("Postgres connected");
+    console.log('Postgres connected');
   })
   .catch((err) => {
-    console.log("Postgres, fail to connect: " + err);
+    console.log('Postgres, fail to connect: ' + err);
   });
 
 // Uncomment to update all tables with the last model

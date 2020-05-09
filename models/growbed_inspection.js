@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var growbed_inspection_schema = new Schema({
@@ -6,12 +6,12 @@ var growbed_inspection_schema = new Schema({
   greenhouse: Schema.Types.Number,
   hour: Schema.Types.Date,
   growbed: Schema.Types.Number,
-  pest: Schema.Types.String,
   observation: Schema.Types.String,
+  pests: [Schema.Types.String],
 });
 
 var growbed_inspection = mongoose.model(
-  "growbed_inspection",
+  'growbed_inspection',
   growbed_inspection_schema
 );
 
