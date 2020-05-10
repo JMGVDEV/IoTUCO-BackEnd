@@ -1,5 +1,5 @@
-const Users = require("./users");
-const Devices = require("./devices");
+const Users = require('./users');
+const Devices = require('./devices');
 
 sync_models = () => {
   Users.sync_users();

@@ -1,7 +1,7 @@
 const Disease = require('../models/diseases');
 
 const getAllDiseases = () => {
-  return Disease.findAll();
+  return Disease.findAll({ attributes: ['name'] });
 };
 
 const createDisease = (disease) => {

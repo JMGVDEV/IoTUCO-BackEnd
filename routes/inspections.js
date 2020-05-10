@@ -4,9 +4,8 @@ const HttpStatus = require('web-status-codes');
 const inspections = require('../controllers/growbed_inspection');
 const diseases = require('../controllers/diseases');
 
-router.post('/inspection/:growbed', auth.verify_user, (req, res) => {
+router.post('/inspection', auth.verify_user, (req, res) => {
   inspection = {
-    ...req.params,
     ...req.body,
     hour: Date.now() - 5 * 60 * 60 * 1000, // To adjust to local time
   };
@@ -19,7 +18,7 @@ router.post('/inspection/:growbed', auth.verify_user, (req, res) => {
       res.status(HttpStatus.OK).json({ ok: true });
     })
     .catch((e) => {
-      res.status(HttpStatus.SERVER_ERROR).json({ ok: false });
+      res.status(HttpStatus.BAD_REQUEST).json({ ok: false });
     });
 });
 
@@ -28,10 +27,20 @@ router.post('/inspection/:growbed', auth.verify_user, (req, res) => {
  */
 router.get('/pests', auth.verify_user, async (req, res) => {
   try {
-    const pests = diseases.getAllDiseases();
+    let pests = await diseases.getAllDiseases();
     res.status(HttpStatus.OK).json({ ok: true, pests });
   } catch (error) {
-    res.status(HttpStatus.SERVER_ERROR).json({ ok: false, error });
+    res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
+  }
+});
+
+router.post('/pests', auth.verify_user, async (req, res) => {
+  try {
+    const pest = await diseases.createDisease(req.body);
+    res.status(HttpStatus.OK).json({ ok: true, pest });
+  } catch (error) {
+    console.log('ERRRRRR');
+    res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
   }
 });
 
