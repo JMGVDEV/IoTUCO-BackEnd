@@ -22,6 +22,22 @@ router.post('/inspection', auth.verify_user, (req, res) => {
     });
 });
 
+router.get('/inspection', auth.verify_user, async (req, res) => {
+  try {
+    let inspection = await inspections.get_inspection(req.query.growbed_id);
+    res.status(200).json({
+      ok: true,
+      inspection: {
+        observation: inspection.observation,
+        pests: inspection.pests,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(HttpStatus.BAD_GATEWAY).json({ ok: false, error });
+  }
+});
+
 /*
  *    Se deben obtener las enfermedades desde una base de datos, deberían haber endpoints para crear enfermedades
  */

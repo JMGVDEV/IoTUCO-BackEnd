@@ -17,4 +17,8 @@ function save_growbed_inspection(inspection) {
   });
 }
 
-module.exports = { save_growbed_inspection };
+const get_inspection = (growbed_id) => {
+  return growbed_inspection.findOne({ growbed: growbed_id }).sort({ hour: -1 });
+};
+
+module.exports = { save_growbed_inspection, get_inspection };
