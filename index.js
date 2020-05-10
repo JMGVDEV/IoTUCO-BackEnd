@@ -1,8 +1,9 @@
 const config = require('./config/config');
 const models = require('./controllers/index');
 const path = require('path');
-let bodyParser = require('body-parser');
-let express = require('express');
+const routes = ['/home','/users','/diseases','/configactions','/'];
+let bodyParser = require("body-parser");
+let express = require("express");
 let app = express();
 
 require('./databases/connection_psql');

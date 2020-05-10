@@ -7,32 +7,40 @@
 
 const config = {
   // Server config
-  PORT: xxxx,
-  IP: "xxx.xxx.xxx.xxx",
+  PORT: x,
+  IP: 'x',
 
   // Databases config
-  PSQL_USER: "xxxx",
-  PSQL_PASSWORD: "xxxx",
-  PSQL_DATABASE: "xxxx",
-  MONGO_DATABASE: "xxxx",
+
+  //Postgres
+  PSQL_IP: 'x',
+  PSQL_PORT: x,
+  PSQL_USER: 'x',
+  PSQL_PASSWORD: 'x',
+  PSQL_DATABASE: 'x',
+
+  //Mongo
+  MONGO_IP: 'x',
+  MONGO_PORT: x,
+  MONGO_DATABASE: 'x',
 
   // Mqtt config
   MQTT_CONF: {
-    host: "mqtt://xxx.xxx.xxx.xxx",
-    port: xxxxx,
-    username: "xxxx",
-    password: "xxxx",
+    host: 'x',
+    port: x,
+    username: 'x',
+    password: 'x',
   },
 
   // Initial user config
-  ADMIN_NAME: "xxxx",
-  ADMIN_EMAIL: "xxxx",
-  ADMIN_PASSWORD: "xxxx",
+  ADMIN_NAME: 'x',
+  ADMIN_EMAIL: 'x',
+  ADMIN_PASSWORD: 'x',
 
   // Security Config
-  JWT_KEY: "xxxx",
-  SALT_ROUNDS: xx,
-  TOKEN_EXP_TIME: "xx days",
+  JWT_KEY: 'x',
+  SALT_ROUNDS: x,
+  TOKEN_EXP_TIME: 'x',
 };
 
 module.exports = config;
