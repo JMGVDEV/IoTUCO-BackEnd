@@ -5,7 +5,6 @@ const User = require('../models/user');
 const speakeasy = require('speakeasy');
 
 sync_users = () => {
-  User.sync({ force: true });
   User.upsert({
     name: config.ADMIN_NAME,
     email: config.ADMIN_EMAIL,
