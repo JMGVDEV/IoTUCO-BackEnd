@@ -48,7 +48,7 @@ function generate_token(user) {
 const verifyTotp = async (req, res, next) => {
   let token = req.headers.token;
   let totpCode = req.headers.totp_code || '';
-
+  console.log(totpCode);
   let decoded;
 
   try {
@@ -79,14 +79,12 @@ const verifyTotp = async (req, res, next) => {
     token: totpCode,
   });
 
-  /*console.log(totpCode);
-  console.log('-------');
   console.log(
     speakeasy.totp({
       secret: user.two_factor_secret,
       encoding: 'base32',
     })
-  );*/
+  );
 
   if (decoded.role == 'admin' && verified) {
     next();

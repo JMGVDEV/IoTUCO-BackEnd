@@ -4,6 +4,17 @@ const HttpStatus = require('web-status-codes');
 const control = require('../services/mqtt/control-mqtt');
 const peripherals = require('../Utils/peripherals');
 
+router.post('/control/door', auth.verifyTotp, (req, res) => {
+  control.publish_greenhouse(
+    peripherals.LOCK,
+    req.body.value,
+    req.body.zone,
+    req.body.greenhouse
+  );
+
+  res.status(HttpStatus.OK).json({ ok: true });
+});
+
 router.post('/control/blinds', auth.verifyTotp, (req, res) => {
   control.publish_greenhouse(
     peripherals.BLINDS,
