@@ -10,8 +10,6 @@ router.post('/inspection', auth.verify_user, (req, res) => {
     hour: Date.now() - 5 * 60 * 60 * 1000, // To adjust to local time
   };
 
-  console.log(inspection);
-
   inspections
     .save_growbed_inspection(inspection)
     .then(() => {
@@ -55,7 +53,6 @@ router.post('/pests', auth.verify_user, async (req, res) => {
     const pest = await diseases.createDisease(req.body);
     res.status(HttpStatus.OK).json({ ok: true, pest });
   } catch (error) {
-    console.log('ERRRRRR');
     res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
   }
 });
