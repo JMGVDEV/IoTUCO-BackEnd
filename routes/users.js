@@ -52,7 +52,6 @@ router.delete('/users/:id', auth.verify_admin, (req, res) => {
 
 // User: Login
 router.post('/login', (req, res) => {
-  console.log(req.body);
   users
     .login_user(req.body)
     .then((response) => {
