@@ -1,22 +1,32 @@
-var router = require("express").Router();
-const auth = require("../middlewares/jwt_auth");
-const HttpStatus = require("web-status-codes");
-const control = require("../services/mqtt/control-mqtt");
-const peripherals = require("../Utils/peripherals");
+var router = require('express').Router();
+const auth = require('../middlewares/jwt_auth');
+const HttpStatus = require('web-status-codes');
+const control = require('../services/mqtt/control-mqtt');
+const peripherals = require('../Utils/peripherals');
 
-router.post("/control/blinds", auth.verify_user, (req, res) => {
-  console.log(req.body);
+router.post('/control/door', auth.verifyTotp, (req, res) => {
+  control.publish_greenhouse(
+    peripherals.LOCK,
+    req.body.value,
+    req.body.zone,
+    req.body.greenhouse
+  );
 
+  res.status(HttpStatus.OK).json({ ok: true });
+});
+
+router.post('/control/blinds', auth.verifyTotp, (req, res) => {
   control.publish_greenhouse(
     peripherals.BLINDS,
     req.body.value,
     req.body.zone,
     req.body.greenhouse
   );
+
   res.status(HttpStatus.OK).json({ ok: true });
 });
 
-router.post("/control/fan", auth.verify_user, (req, res) => {
+router.post('/control/fan', auth.verifyTotp, (req, res) => {
   control.publish_greenhouse(
     peripherals.FAN,
     req.body.value,
@@ -26,7 +36,7 @@ router.post("/control/fan", auth.verify_user, (req, res) => {
   res.status(HttpStatus.OK).json({ ok: true });
 });
 
-router.post("/control/lights", auth.verify_user, (req, res) => {
+router.post('/control/lights', auth.verifyTotp, (req, res) => {
   control
     .program_lights(req.body)
     .then(() => {
@@ -35,9 +45,6 @@ router.post("/control/lights", auth.verify_user, (req, res) => {
     .catch((err) => {
       res.status(HttpStatus.BAD_REQUEST).json({ ok: false, err });
     });
-  /*.catch(() => {
-      res.status(HttpStatus.CLIENT_ERROR).json({ ok: false });
-    });*/
 });
 
 module.exports = router;

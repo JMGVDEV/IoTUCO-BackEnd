@@ -1,23 +1,21 @@
-var router = require("express").Router();
-const users = require("../controllers/users");
-const HttpStatus = require("web-status-codes");
-const auth = require("../middlewares/jwt_auth");
+var router = require('express').Router();
+const users = require('../controllers/users');
+const HttpStatus = require('web-status-codes');
+const auth = require('../middlewares/jwt_auth');
 
 // User: Create
-router.post("/users", auth.verify_admin, (req, res) => {
-  users
-    .create_user(req.body)
-    .then(() => {
-      res.status(HttpStatus.CREATED).json({ ok: true });
-    })
-    .catch((err) => {
-      console.log("err:" + err);
-      res.status(HttpStatus.CONFLICT).json({ ok: false, err });
-    });
+router.post('/users', auth.verify_admin, async (req, res) => {
+  try {
+    let TwoFactorUrl = await users.create_user(req.body);
+    res.status(HttpStatus.CREATED).json({ ok: true, TwoFactorUrl });
+  } catch (error) {
+    console.log('err:' + error);
+    res.status(HttpStatus.CONFLICT).json({ ok: false, error });
+  }
 });
 
 // Get all users
-router.get("/users", auth.verify_admin, (req, res) => {
+router.get('/users', auth.verify_admin, (req, res) => {
   users
     .get_all_users()
     .then((users) => {
@@ -28,20 +26,20 @@ router.get("/users", auth.verify_admin, (req, res) => {
     });
 });
 
-router.put("/users/:id", auth.verify_admin, (req, res) => {
+router.put('/users/:id', auth.verify_admin, (req, res) => {
   users
     .update_user(req.body, req.params.id)
     .then(() => {
       res.status(HttpStatus.OK).json({ ok: true });
     })
     .catch((err) => {
-      console.log("err" + err);
+      console.log('err' + err);
       res.status(HttpStatus.CONFLICT).json({ ok: false, err });
     });
 });
 
 //Delete one user by id
-router.delete("/users/:id", auth.verify_admin, (req, res) => {
+router.delete('/users/:id', auth.verify_admin, (req, res) => {
   users
     .delete_user(req.params)
     .then(() => {
@@ -53,8 +51,7 @@ router.delete("/users/:id", auth.verify_admin, (req, res) => {
 });
 
 // User: Login
-router.post("/login", (req, res) => {
-  console.log(req.body);
+router.post('/login', (req, res) => {
   users
     .login_user(req.body)
     .then((response) => {
@@ -65,7 +62,7 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.get("/validate_token", auth.verify_user, (req, res) => {
+router.get('/validate_token', auth.verify_user, (req, res) => {
   res.status(HttpStatus.OK).json({ ok: true });
 });
 

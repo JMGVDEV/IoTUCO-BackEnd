@@ -1,9 +1,10 @@
-const Users = require("./users");
-const Devices = require("./devices");
+const Users = require('./users');
+const Devices = require('./devices');
+const sequelize = require('../databases/connection_psql');
 
-sync_models = () => {
+sync_models = async () => {
+  await sequelize.sync({ force: false });
   Users.sync_users();
-  Devices.sync_devices();
 };
 
 module.exports = {

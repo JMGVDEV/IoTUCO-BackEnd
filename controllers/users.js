@@ -2,11 +2,9 @@ const config = require('../config/config');
 var auth = require('../middlewares/jwt_auth');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const speakeasy = require('speakeasy');
 
-sync_users = async () => {
-  console.log('Trying to create admin user');
-  await User.sync();
-
+sync_users = () => {
   User.upsert({
     name: config.ADMIN_NAME,
     email: config.ADMIN_EMAIL,
@@ -21,25 +19,26 @@ sync_users = async () => {
     });
 };
 
-create_user = (user_data) => {
+create_user = async (user_data) => {
   console.log('Trying to create user');
-  return new Promise((resolve, reject) => {
-    user = {
-      name: user_data.name,
-      last_name: user_data.last_name,
-      email: user_data.email,
-      role: user_data.role,
-    };
 
-    user['password'] = bcrypt.hashSync(user_data.password, config.SALT_ROUNDS);
+  user = {
+    name: user_data.name,
+    last_name: user_data.last_name,
+    email: user_data.email,
+    role: user_data.role,
+  };
 
-    User.create(user)
-      .then((user) => {
-        resolve();
-      })
-      .catch((err) => {
-        reject(err);
-      });
+  const twoFactorsSecret = speakeasy.generateSecret();
+
+  user['password'] = bcrypt.hashSync(user_data.password, config.SALT_ROUNDS);
+  user['two_factor_secret'] = twoFactorsSecret.base32;
+
+  await User.create(user);
+  return speakeasy.otpauthURL({
+    secret: twoFactorsSecret.base32,
+    encoding: 'base32',
+    label: 'Greenhouse monitoring system',
   });
 };
 

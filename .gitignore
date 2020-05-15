@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=node
 
 config/config.js
+build
 
 ### Node ###
 # Logs
