@@ -23,6 +23,13 @@ router.post('/inspection', auth.verify_user, (req, res) => {
 router.get('/inspection', auth.verify_user, async (req, res) => {
   try {
     let inspection = await inspections.get_inspection(req.query.growbed_id);
+
+    if (inspection == null) {
+      inspection = {};
+      inspection.observation = '';
+      inspection.pests = [];
+    }
+
     res.status(200).json({
       ok: true,
       inspection: {
