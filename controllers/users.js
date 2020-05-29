@@ -3,6 +3,7 @@ var auth = require('../middlewares/jwt_auth');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const speakeasy = require('speakeasy');
+var zxcvbn = require('zxcvbn');
 
 sync_users = () => {
   User.upsert({
@@ -28,6 +29,16 @@ create_user = async (user_data) => {
     email: user_data.email,
     role: user_data.role,
   };
+
+  let results = zxcvbn(user_data.password);
+
+  if (results.score <= 2) {
+    throw {
+      msg: 'Weak password',
+      score: results.score,
+      feedback: results.feedback,
+    };
+  }
 
   const twoFactorsSecret = speakeasy.generateSecret();
 
