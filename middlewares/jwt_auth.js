@@ -86,7 +86,7 @@ const verifyTotp = async (req, res, next) => {
     })
   );
 
-  if (decoded.role == 'admin' && verified) {
+  if (decoded.role == 'viewer' && verified) {
     next();
   } else {
     return res.status(HttpStatus.UNAUTHORIZED).json({ ok: false });
