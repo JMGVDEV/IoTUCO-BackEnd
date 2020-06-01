@@ -54,7 +54,6 @@ get_all_grow_houses = () => {
 };
 
 module.exports = {
-  sync_devices,
   add_device,
   get_all_grow_beds,
   get_all_grow_houses,

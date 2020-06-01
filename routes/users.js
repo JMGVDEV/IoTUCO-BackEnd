@@ -9,8 +9,7 @@ router.post('/users', auth.verify_admin, async (req, res) => {
     let TwoFactorUrl = await users.create_user(req.body);
     res.status(HttpStatus.CREATED).json({ ok: true, TwoFactorUrl });
   } catch (error) {
-    console.log('err:' + error);
-    res.status(HttpStatus.CONFLICT).json({ ok: false, error });
+    res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
   }
 });
 
