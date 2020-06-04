@@ -21,7 +21,6 @@ sequelize
   .catch((err) => {
     console.log('Postgres, fail to connect: ' + err);
   });
-
 // Uncomment to update all tables with the last model
 //
 //                    WARNING:
