@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const greenhouse_environment_schema = new Schema({
@@ -11,7 +11,7 @@ const greenhouse_environment_schema = new Schema({
 });
 
 var greenhouse_environment = mongoose.model(
-  "environment_greenhouse",
+  'environment_greenhouse',
   greenhouse_environment_schema
 );
 
