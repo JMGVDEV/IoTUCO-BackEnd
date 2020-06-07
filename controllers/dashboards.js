@@ -1,5 +1,6 @@
 var { growbed_environment } = require('../models/growbed_environment');
 var { growbed_inspection } = require('../models/growbed_inspection');
+var { log_action } = require('../models/log_actions');
 
 const getHistoricalEnvironmentVariables = async (greenhouse, growbed) => {
   const query = await growbed_environment
@@ -135,8 +136,80 @@ const getDegreesDay = async (greenhouse, growbed) => {
   };
 };
 
+const getEvents = async (greenhouse) => {
+  /*
+   * Get unique dates where temperature is not null
+   */
+  let eventDates = await log_action
+    .find()
+    .select({ hour: 1, _id: 0 })
+    .distinct('hour');
+
+  eventDates = eventDates.map((date) => {
+    /*
+     * Set time to midnoght
+     */
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+
+  let date = [];
+  let dataBlinds = [];
+  let dataLigths = [];
+  let dataFan = [];
+  let dataLock = [];
+
+  for (let initDate of eventDates) {
+    const endDate = new Date(initDate);
+    endDate.setHours(24, 0, 0, 0);
+
+    /*
+     * Find the number of actions for each day
+     */
+    const blindsEventsCount = await getEvent('BLINDS', initDate, endDate);
+    const lightsEventsCount = await getEvent('LIGHTS', initDate, endDate);
+    const fanEventsCount = await getEvent('FAN', initDate, endDate);
+    const lockEventsCount = await getEvent('LOCK', initDate, endDate);
+
+    if (date.indexOf(initDate.toISOString()) == -1) {
+      date.push(initDate.toISOString());
+      dataBlinds.push(blindsEventsCount);
+      dataLigths.push(lightsEventsCount);
+      dataFan.push(fanEventsCount);
+      dataLock.push(lockEventsCount);
+    }
+  }
+
+  return {
+    series: [
+      { name: 'BLINDS', data: dataBlinds },
+      { name: 'LIGHTS', data: dataLigths },
+      { name: 'FAN', data: dataFan },
+      { name: 'LOCK', data: dataLock },
+    ],
+    date,
+  };
+};
+
+const getEvent = async (event, initDate, endDate) => {
+  let events = await log_action
+    .find({
+      type: event,
+      hour: {
+        $gte: initDate,
+        $lt: endDate,
+      },
+    })
+    .countDocuments();
+
+  return events;
+};
+
+getEvents(1);
+
 module.exports = {
   getHistoricalEnvironmentVariables,
   getDiseases,
   getDegreesDay,
+  getEvents,
 };
