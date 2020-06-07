@@ -51,4 +51,92 @@ const getDiseases = async (greenhouse) => {
   return countDiseases;
 };
 
-module.exports = { getHistoricalEnvironmentVariables, getDiseases };
+const getDegreesDay = async (greenhouse, growbed) => {
+  const baseTemperature = 20;
+
+  /*
+   * Get unique dates where temperature is not null
+   */
+  let environment_dates = await growbed_environment
+    .find({ greenhouse, temperature: { $ne: null } })
+    .select({ hour: 1, _id: 0 })
+    .distinct('hour');
+
+  environment_dates = environment_dates.map((date) => {
+    /*
+     * Set time to midnoght
+     */
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+
+  let date = [];
+  let degrees = [];
+
+  for (let dateInit of environment_dates) {
+    /*
+     * Generate initial and final time
+     */
+
+    //let initDate =
+    const dateEnd = new Date(dateInit);
+    dateEnd.setHours(24, 0, 0, 0);
+
+    /*
+     * Find the last value
+     */
+
+    let minTemperature = await growbed_environment
+      .findOne({
+        growbed,
+        greenhouse,
+        hour: {
+          $gte: dateInit,
+          $lt: dateEnd,
+        },
+      })
+      .select({ temperature: 1, _id: 0 })
+      .sort({ temperature: 1 })
+      .lean();
+
+    /*
+     * Find the first value
+     */
+    let maxTemperature = await growbed_environment
+      .findOne({
+        growbed,
+        greenhouse,
+        hour: {
+          $gte: dateInit,
+          $lt: dateEnd,
+        },
+      })
+      .select({ temperature: 1, _id: 0 })
+      .sort({ temperature: -1 })
+      .lean();
+
+    minTemperature = parseFloat(minTemperature.temperature);
+    maxTemperature = parseFloat(maxTemperature.temperature);
+
+    const DegreesDay = (maxTemperature + minTemperature) / 2 - baseTemperature;
+
+    /*
+     * Save data if not exists
+     */
+    if (date.indexOf(dateInit.toISOString()) == -1) {
+      date.push(dateInit.toISOString());
+      degrees.push(DegreesDay);
+    }
+  }
+
+  return {
+    date,
+    degrees,
+  };
+};
+
+module.exports = {
+  getHistoricalEnvironmentVariables,
+  getDiseases,
+  getDegreesDay,
+};
