@@ -28,7 +28,7 @@ router.get('/dashboards/diseases', auth.verify_user, async (req, res) => {
 
 router.get('/dashboards/degrees', auth.verify_user, async (req, res) => {
   try {
-    let data = await getDegreesDay(req.body.greenhouse, req.body.growbed);
+    let data = await getDegreesDay(req.query.greenhouse, req.query.growbed);
     res.status(HttpStatus.OK).json({ ok: true, data });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });

@@ -16,6 +16,7 @@ router.post('/control/door', auth.verifyTotp, (req, res) => {
   const logData = {
     hour: Date.now(),
     type: 'LOCK',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
@@ -52,6 +53,7 @@ router.post('/control/fan', auth.verifyTotp, (req, res) => {
   const logData = {
     hour: Date.now(),
     type: 'FAN',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
