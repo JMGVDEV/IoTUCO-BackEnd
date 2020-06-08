@@ -8,21 +8,31 @@ const getHistoricalEnvironmentVariables = async (greenhouse, growbed) => {
     .select({ temperature: 1, humidity: 1, hour: 1, _id: 0 })
     .lean();
 
-  const data = {
-    temperature: [],
-    humidity: [],
-    date: [],
-  };
+  let temperature = [];
+  let humidity = [];
+  let date = [];
 
   query.forEach((document) => {
     if (document.temperature && document.humidity && document.hour) {
-      data.temperature.push(parseFloat(document.temperature));
-      data.humidity.push(parseFloat(document.humidity));
-      data.date.push(document.hour);
+      temperature.push(parseFloat(document.temperature));
+      humidity.push(parseFloat(document.humidity));
+      date.push(document.hour);
     }
   });
 
-  return data;
+  return {
+    series: [
+      {
+        name: 'Temperature',
+        data: temperature,
+      },
+      {
+        name: 'Humedad',
+        data: humidity,
+      },
+    ],
+    date,
+  };
 };
 
 const getDiseases = async (greenhouse) => {
@@ -42,14 +52,18 @@ const getDiseases = async (greenhouse) => {
     }
   }
 
-  let countDiseases = {};
+  let labels = [];
+  let series = [];
+
   diseases.forEach((disease) => {
-    countDiseases[disease] = diseases.filter(
-      (diseaseF) => diseaseF == disease
-    ).length;
+    if (labels.indexOf(disease) === -1) {
+      let count = diseases.filter((diseaseF) => diseaseF == disease).length;
+      labels.push(disease);
+      series.push(count);
+    }
   });
 
-  return countDiseases;
+  return { series, labels };
 };
 
 const getDegreesDay = async (greenhouse, growbed) => {
@@ -201,12 +215,12 @@ const getEvents = async (greenhouse_id) => {
 
   return {
     series: [
-      { name: 'BLINDS_OPEN', data: dataBlindsOpen },
-      { name: 'BLINDS_CLOSE', data: dataBlindsClose },
-      { name: 'LOCK_OPEN', data: dataLockOpen },
-      { name: 'LOCK_CLOSE', data: dataLockClose },
+      { name: 'Apertura de cortinas', data: dataBlindsOpen },
+      { name: 'Cierre de cortinas', data: dataBlindsClose },
+      { name: 'Apertura de puerta', data: dataLockOpen },
+      { name: 'Cierre de puerta', data: dataLockClose },
 
-      { name: 'LIGHTS', data: dataLigths },
+      { name: 'Programación de luces', data: dataLigths },
     ],
     date,
   };
