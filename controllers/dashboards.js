@@ -144,7 +144,6 @@ const getEvents = async (greenhouse_id) => {
     .find({ greenhouse_id })
     .select({ hour: 1, _id: 0 })
     .distinct('hour');
-  console.log(eventDates);
 
   eventDates = eventDates.map((date) => {
     /*

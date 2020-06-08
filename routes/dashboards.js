@@ -1,5 +1,5 @@
 const {
-  getHistoricalData,
+  getHistoricalEnvironmentVariables,
   getDiseases,
   getDegreesDay,
   getEvents,
@@ -10,7 +10,10 @@ const HttpStatus = require('web-status-codes');
 
 router.get('/dashboards/historical', auth.verify_user, async (req, res) => {
   try {
-    let data = await getHistoricalData(req.body.greenhouse, req.body.growbed);
+    let data = await getHistoricalEnvironmentVariables(
+      req.query.greenhouse,
+      req.query.growbed
+    );
     res.status(HttpStatus.OK).json({ ok: true, data });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
@@ -19,7 +22,7 @@ router.get('/dashboards/historical', auth.verify_user, async (req, res) => {
 
 router.get('/dashboards/diseases', auth.verify_user, async (req, res) => {
   try {
-    let data = await getDiseases(req.body.greenhouse);
+    let data = await getDiseases(req.query.greenhouse);
     res.status(HttpStatus.OK).json({ ok: true, data });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });
