@@ -37,7 +37,7 @@ router.get('/dashboards/degrees', auth.verify_user, async (req, res) => {
 
 router.get('/dashboards/events', auth.verify_user, async (req, res) => {
   try {
-    let data = await getEvents(req.body.greenhouse);
+    let data = await getEvents(req.query.greenhouse);
     res.status(HttpStatus.OK).json({ ok: true, data });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({ ok: false, error });

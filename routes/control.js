@@ -35,6 +35,7 @@ router.post('/control/blinds', auth.verifyTotp, (req, res) => {
   const logData = {
     hour: Date.now(),
     type: 'BLINDS',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
@@ -66,6 +67,7 @@ router.post('/control/lights', auth.verifyTotp, (req, res) => {
     hour: Date.now(),
     type: 'LIGHTS',
     growbed_id: req.body.growbed,
+    value: 100,
     greenhouse_id: req.body.greenhouse,
   };
 

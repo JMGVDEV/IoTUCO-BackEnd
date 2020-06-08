@@ -5,7 +5,7 @@ const log_action_schema = new Schema({
   type: Schema.Types.String,
   value: Schema.Types.Number,
   hour: Schema.Types.Date,
-  green_house_id: Schema.Types.Number,
+  greenhouse_id: Schema.Types.Number,
   growbed_id: Schema.Types.Number,
 });
 

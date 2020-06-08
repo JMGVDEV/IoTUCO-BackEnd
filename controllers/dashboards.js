@@ -136,14 +136,15 @@ const getDegreesDay = async (greenhouse, growbed) => {
   };
 };
 
-const getEvents = async (greenhouse) => {
+const getEvents = async (greenhouse_id) => {
   /*
    * Get unique dates where temperature is not null
    */
   let eventDates = await log_action
-    .find()
+    .find({ greenhouse_id })
     .select({ hour: 1, _id: 0 })
     .distinct('hour');
+  console.log(eventDates);
 
   eventDates = eventDates.map((date) => {
     /*
@@ -154,10 +155,13 @@ const getEvents = async (greenhouse) => {
   });
 
   let date = [];
-  let dataBlinds = [];
+  let dataBlindsOpen = [];
+  let dataBlindsClose = [];
+
+  let dataLockOpen = [];
+  let dataLockClose = [];
+
   let dataLigths = [];
-  let dataFan = [];
-  let dataLock = [];
 
   for (let initDate of eventDates) {
     const endDate = new Date(initDate);
@@ -166,34 +170,53 @@ const getEvents = async (greenhouse) => {
     /*
      * Find the number of actions for each day
      */
-    const blindsEventsCount = await getEvent('BLINDS', initDate, endDate);
-    const lightsEventsCount = await getEvent('LIGHTS', initDate, endDate);
-    const fanEventsCount = await getEvent('FAN', initDate, endDate);
-    const lockEventsCount = await getEvent('LOCK', initDate, endDate);
+    const blindsCloseEventsCount = await getEvent(
+      'BLINDS',
+      initDate,
+      endDate,
+      (value = 0)
+    );
+    const blindsOpenEventsCount = await getEvent(
+      'BLINDS',
+      initDate,
+      endDate,
+      (value = 100)
+    );
+
+    const lockOpenEventsCount = await getEvent('LOCK', initDate, endDate, 100);
+    const lockCloseEventsCount = await getEvent('LOCK', initDate, endDate, 0);
+
+    const lightsEventsCount = await getEvent('LIGHTS', initDate, endDate, 100);
 
     if (date.indexOf(initDate.toISOString()) == -1) {
       date.push(initDate.toISOString());
-      dataBlinds.push(blindsEventsCount);
+
+      dataBlindsOpen.push(blindsOpenEventsCount);
+      dataBlindsClose.push(blindsCloseEventsCount);
+      dataLockOpen.push(lockOpenEventsCount);
+      dataLockClose.push(lockCloseEventsCount);
+
       dataLigths.push(lightsEventsCount);
-      dataFan.push(fanEventsCount);
-      dataLock.push(lockEventsCount);
     }
   }
 
   return {
     series: [
-      { name: 'BLINDS', data: dataBlinds },
+      { name: 'BLINDS_OPEN', data: dataBlindsOpen },
+      { name: 'BLINDS_CLOSE', data: dataBlindsClose },
+      { name: 'LOCK_OPEN', data: dataLockOpen },
+      { name: 'LOCK_CLOSE', data: dataLockClose },
+
       { name: 'LIGHTS', data: dataLigths },
-      { name: 'FAN', data: dataFan },
-      { name: 'LOCK', data: dataLock },
     ],
     date,
   };
 };
 
-const getEvent = async (event, initDate, endDate) => {
+const getEvent = async (event, initDate, endDate, value) => {
   let events = await log_action
     .find({
+      value,
       type: event,
       hour: {
         $gte: initDate,
@@ -204,8 +227,6 @@ const getEvent = async (event, initDate, endDate) => {
 
   return events;
 };
-
-getEvents(1);
 
 module.exports = {
   getHistoricalEnvironmentVariables,
