@@ -82,18 +82,25 @@ const getDegreesDay = async (greenhouse, growbed) => {
      * Set time to midnoght
      */
     date.setHours(0, 0, 0, 0);
-    return date;
+    return date.getTime();
   });
 
   let date = [];
   let degrees = [];
 
-  for (let dateInit of environment_dates) {
+  /*
+   * Gen unique dates
+   */
+  let filtered_dates = environment_dates.filter((date, idx) => {
+    return environment_dates.indexOf(date) == idx;
+  });
+
+  for (let dateInit of filtered_dates) {
     /*
      * Generate initial and final time
      */
 
-    //let initDate =
+    dateInit = new Date(dateInit);
     const dateEnd = new Date(dateInit);
     dateEnd.setHours(24, 0, 0, 0);
 
@@ -109,6 +116,7 @@ const getDegreesDay = async (greenhouse, growbed) => {
           $gte: dateInit,
           $lt: dateEnd,
         },
+        temperature: { $ne: null },
       })
       .select({ temperature: 1, _id: 0 })
       .sort({ temperature: 1 })
@@ -125,10 +133,15 @@ const getDegreesDay = async (greenhouse, growbed) => {
           $gte: dateInit,
           $lt: dateEnd,
         },
+        temperature: { $ne: null },
       })
       .select({ temperature: 1, _id: 0 })
       .sort({ temperature: -1 })
       .lean();
+
+    if (!minTemperature || !maxTemperature) {
+      continue;
+    }
 
     minTemperature = parseFloat(minTemperature.temperature);
     maxTemperature = parseFloat(maxTemperature.temperature);
