@@ -15,6 +15,8 @@ function convert_message_to_json(message) {
 save_growbed_environment_registre = (growbed_data) => {
   growbed_data = JSON.parse(growbed_data);
   growbed_data.hour = new Date(); //growbed_data.hour * 1000; // For adjust time to local hour
+  //growbed_data.date = `${new Date().getMonth()}:${new Date().getDay()} `;
+
   const new_growbed_environment = new growbed_environment(growbed_data);
   new_growbed_environment
     .save()

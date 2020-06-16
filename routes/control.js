@@ -15,7 +15,8 @@ router.post('/control/door', auth.verifyTotp, (req, res) => {
 
   const logData = {
     hour: Date.now(),
-    type: peripherals.LOCK,
+    type: 'LOCK',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
@@ -33,7 +34,8 @@ router.post('/control/blinds', auth.verifyTotp, (req, res) => {
 
   const logData = {
     hour: Date.now(),
-    type: peripherals.BLINDS,
+    type: 'BLINDS',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
@@ -51,7 +53,8 @@ router.post('/control/fan', auth.verifyTotp, (req, res) => {
 
   const logData = {
     hour: Date.now(),
-    type: peripherals.FAN,
+    type: 'FAN',
+    value: req.body.value,
     greenhouse_id: req.body.greenhouse,
   };
 
@@ -62,8 +65,9 @@ router.post('/control/fan', auth.verifyTotp, (req, res) => {
 router.post('/control/lights', auth.verifyTotp, (req, res) => {
   const logData = {
     hour: Date.now(),
-    type: peripherals.LIGHT,
+    type: 'LIGHTS',
     growbed_id: req.body.growbed,
+    value: 100,
     greenhouse_id: req.body.greenhouse,
   };
 
